@@ -17,13 +17,13 @@ local function font(s, t)
     end
 end
 
-theme.font          = font(13)
+theme.font          = font(14);
 
 ------ COLORS --------------
 theme.colors = {
     white           = "#ebddb2",
     grey            = "#928374",
-    darkGrey        = "#3c3836",
+    darkGrey        = "#282828",
     black           = "#1d2021",
 
     red             = "#cc241d",
@@ -116,7 +116,7 @@ local function make_gradient(color)
     return {
         type  = 'linear',
         from  = { 0, 0 },
-        to    = { 0, 24 },
+        to    = { 0, 5 },
         stops = {
             { 0.1, color },
             { 0.1, color .. alpha_level }
@@ -125,9 +125,14 @@ local function make_gradient(color)
 end
 
 theme.tasklist_bg_normal                        = make_gradient(theme.colors.grey)
-theme.tasklist_bg_focus                         = make_gradient(theme.colors.white)
-theme.tasklist_bg_minimize                      = make_gradient(theme.colors.darkGrey)
+theme.tasklist_bg_focus                         = make_gradient(theme.colors.grey)
+theme.tasklist_bg_minimize                      = theme.colors.darkGrey .. '00'
 theme.tasklist_bg_urgent                        = make_gradient(theme.colors.red)
+
+-- theme.tasklist_bg_normal                        = theme.colors.black
+-- theme.tasklist_bg_focus                         = theme.colors.darkGrey
+-- theme.tasklist_bg_minimize                      = theme.colors.black
+-- theme.tasklist_bg_urgent                        = theme.colors.darkGrey
 
 -- Tasklist icons
 theme.tasklist_sticky = ' '
@@ -260,15 +265,16 @@ theme.menu_bg_normal    = theme.colors.black .. '99'
 -- hotkeys
 theme.hotkeys_bg                = theme.colors.black .. 'CC'
 theme.hotkeys_fg                = theme.colors.white
-theme.hotkeys_border_width      = dpi(4)
+theme.hotkeys_width             = 3000
+theme.hotkeys_border_width      = dpi(2)
 theme.hotkeys_border_color      = theme.colors.green
-theme.hotkeys_shape             = gears.shape.rectangle
+theme.hotkeys_shape             = gears.shape.triangle
 theme.hotkeys_modifiers_fg      = theme.colors.green
 theme.hotkeys_label_bg          = theme.colors.green
 theme.hotkeys_label_fg          = theme.colors.black
-theme.hotkeys_font              = font(12, "Bold")
-theme.hotkeys_description_font  = font(12)
-theme.hotkeys_group_margin      = dpi(4)
+theme.hotkeys_font              = font(18, "Bold")
+theme.hotkeys_description_font  = font(18)
+theme.hotkeys_group_margin      = dpi(2)
 
 theme.shutdown_icon = theme_path .. "icons/apps/shutdown.svg"
 theme.reboot_icon = theme_path .. "icons/apps/reboot.svg"
@@ -287,9 +293,9 @@ theme.logout_icon = theme_path .. "icons/apps/logout.svg"
 -- theme.titlebar_bgimage = nil
 
 -- Player widget
-theme.player_widget_bg      = theme.colors.yellow
-theme.player_widget_fg      = theme.colors.lightYellow
-theme.player_widget_font    = font(13)
+theme.player_widget_bg      = theme.colors.darkGrey 
+theme.player_widget_fg      = theme.colors.green
+theme.player_widget_font    = font(12.7)
 theme.player_widget_width   = dpi(290)
 
 -- Volume widget
@@ -374,16 +380,16 @@ theme.titlebar_sticky_button_focus_inactive  = recolor(circle_png, theme.colors.
 local layout_icon_color = theme.colors.grey
 -- theme.layout_fairh          = recolor(theme_path.."icons/layouts/fairh.png",        layout_icon_color)
 -- theme.layout_fairv          = recolor(theme_path.."icons/layouts/fairv.png",        layout_icon_color)
-theme.layout_floating       = recolor(theme_path.."icons/layouts/floating.png",     layout_icon_color)
+-- theme.layout_floating       = recolor(theme_path.."icons/layouts/floating.png",     layout_icon_color)
 -- theme.layout_magnifier      = recolor(theme_path.."icons/layouts/magnifier.png",    layout_icon_color)
--- theme.layout_max            = recolor(theme_path.."icons/layouts/max.png",          layout_icon_color)
+theme.layout_max            = recolor(theme_path.."icons/layouts/max.png",          layout_icon_color)
 -- theme.layout_fullscreen     = recolor(theme_path.."icons/layouts/fullscreen.png",   layout_icon_color)
 -- theme.layout_tilebottom     = recolor(theme_path.."icons/layouts/tilebottom.png",   layout_icon_color)
-theme.layout_tileleft       = recolor(theme_path.."icons/layouts/tileleft.png",     layout_icon_color)
-theme.layout_tile           = recolor(theme_path.."icons/layouts/tile.png",         layout_icon_color)
+-- theme.layout_tileleft       = recolor(theme_path.."icons/layouts/tileleft.png",     layout_icon_color)
+-- theme.layout_tile           = recolor(theme_path.."icons/layouts/tile.png",         layout_icon_color)
 -- theme.layout_tiletop        = recolor(theme_path.."icons/layouts/tiletop.png",      layout_icon_color)
 -- theme.layout_spiral         = recolor(theme_path.."icons/layouts/spiral.png",       layout_icon_color)
--- theme.layout_dwindle        = recolor(theme_path.."icons/layouts/dwindle.png",      layout_icon_color)
+theme.layout_dwindle        = recolor(theme_path.."icons/layouts/dwindle.png",      layout_icon_color)
 -- theme.layout_cornernw       = recolor(theme_path.."icons/layouts/cornernw.png",     layout_icon_color)
 -- theme.layout_cornerne       = recolor(theme_path.."icons/layouts/cornerne.png",     layout_icon_color)
 -- theme.layout_cornersw       = recolor(theme_path.."icons/layouts/cornersw.png",     layout_icon_color)
@@ -399,5 +405,5 @@ theme.awesome_icon = theme_assets.awesome_icon(
 
 -- Define the icon theme for application icons. If not set then the icons
 -- from /usr/share/icons and /usr/share/icons/hicolor will be used.
-theme.icon_theme = "Papirus"
+theme.icon_theme = "Numix"
 return theme

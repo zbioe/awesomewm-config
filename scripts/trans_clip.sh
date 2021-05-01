@@ -1,17 +1,18 @@
 #!/bin/bash
-text=`xclip -o`
+text=$(xclip -o)
 
 if [ $? -eq 1 ]
 then
-	exit
+    exit
 fi
 
-trans -hl ru -tl ru -brief "$text" -o /tmp/brief_trans.out
+tmpfile="$(mktemp --suffix=-translate)"
+trans -tl pt-BR+en-US -hl en-US+en-US -brief "$text" -o $tmpfile
 
 zenity\
     --width=400\
     --height=720\
     --title="Translation"\
-    --text-info --filename="/tmp/brief_trans.out"
+    --text-info --filename="$tmpfile"
 
-rm /tmp/brief_trans.out
+rm $tmpfile

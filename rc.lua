@@ -62,16 +62,16 @@ local modkey = "Mod4"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 tag.connect_signal("request::default_layouts", function()
     awful.layout.append_default_layouts({
-        awful.layout.suit.floating,
-        awful.layout.suit.tile,
-        awful.layout.suit.tile.left,
+        -- awful.layout.suit.floating,
+        -- awful.layout.suit.tile,
+        -- awful.layout.suit.tile.left,
         -- awful.layout.suit.tile.bottom,
         -- awful.layout.suit.tile.top,
         -- awful.layout.suit.fair,
         -- awful.layout.suit.fair.horizontal,
         -- awful.layout.suit.spiral,
-        -- awful.layout.suit.spiral.dwindle,
-        -- awful.layout.suit.max,
+        awful.layout.suit.spiral.dwindle,
+        awful.layout.suit.max,
         -- awful.layout.suit.max.fullscreen,
         -- awful.layout.suit.magnifier,
         -- awful.layout.suit.corner.nw,
@@ -209,12 +209,11 @@ awful.screen.connect_for_each_screen(function(s)
         }):setup {
         {
             -- Left widgets
-            layout = wibox.layout.fixed.horizontal,
             modules.widgets.menu_button,
-            mypromptbox,
-            s.mylayoutbox,
+            layout = wibox.layout.fixed.horizontal,
             s.mytaglist,
             nextEmptyTag,
+            mypromptbox,
         },
         {
             -- Center widgets
@@ -232,6 +231,8 @@ awful.screen.connect_for_each_screen(function(s)
             modules.widgets.volume.text_widget,
             mykeyboardlayout,
             mytextclock,
+            myseparator,
+            s.mylayoutbox,
             modules.widgets.tray.widget,
             layout = wibox.layout.fixed.horizontal,
         },
@@ -239,6 +240,8 @@ awful.screen.connect_for_each_screen(function(s)
     }
 end)
 
+-- my_hotkeys_popup = hotkeys_popup.new({ width = dpi(200), height = dpi(200) });
+ 
 -- Set keys
 local globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Return",
@@ -251,20 +254,21 @@ local globalkeys = gears.table.join(
             awful.spawn(terminal, { floating = true })
         end, {description = "open a floating terminal", group = "Applications"}),
 
-    awful.key({"Control", "Mod1"}, "w",
+    awful.key({modkey, "Control" }, "w",
         function()
-            script = gears.filesystem.get_configuration_dir() .. 'scripts/trans_clip.sh'
+            
             awful.spawn.with_shell(script)
         end, {description = "Translate text from selection", group = "Translation"}),
 
-    awful.key({"Control", "Mod1"}, "e",
-        function()
+
+
+    awful.key({modkey, "Control" }, "p", function()
             awful.prompt.run {
                 prompt       = "Text for translation: ",
                 textbox      = mypromptbox.widget,
                 exe_callback = function(text)
                     awful.spawn.easy_async([[
-                            bash -c 'trans -tl ru -brief "]] .. text .. [["'
+                            bash -c 'trans -tl pt-BR -hl en-US -brief "]] .. text .. [["'
                     ]], function(stdout)
                     naughty.notify({
                         title      = "Translation:",
@@ -275,27 +279,52 @@ local globalkeys = gears.table.join(
                     end)
                 end
             }
-        end, {description = "Translate text", group = "Translation"}),
+        end, {description = "Translate text to portuguese", group = "Translation"}),
 
-    awful.key({"Control", "Mod1"}, "c",
+    awful.key({modkey, "Control" }, "e",
         function()
-            awful.spawn.spawn("kitty -e python", {
+            awful.prompt.run {
+                prompt       = "Text for translation: ",
+                textbox      = mypromptbox.widget,
+                exe_callback = function(text)
+                    awful.spawn.easy_async([[
+                            bash -c 'trans -tl en-US -hl pt-BR -brief "]] .. text .. [["'
+                    ]], function(stdout)
+                    naughty.notify({
+                        title      = "Translation:",
+                        text       = stdout,
+                        timeout    = 0,
+                        max_height = dpi(400),
+                        })
+                    end)
+                end
+            }
+        end, {description = "Translate text to english", group = "Translation"}),
+
+    awful.key({modkey, "Control" }, "x",
+        function()
+            naughty.destroy_all_notifications()
+        end, {description = "Destroy all notifications", group = "Awesome"}),
+
+    awful.key({modkey, "Control" }, "c",
+        function()
+            awful.spawn.spawn("alacritty -e python", {
                     floating = true,
                 })
         end, {description = "Python", group = "Applications"}),
 
     ----------------------{ AWESOME }--------------------------------------------
-    awful.key({ modkey }, "r",
+    awful.key({ modkey }, "p",
         function ()
             awful.spawn([[rofi -show drun -modi drun -show-icons -width 30 -lines 8 -kb-row-tab "Tab"]])
         end, {description = "Run rofi launcher", group = "Awesome"}),
 
-    awful.key({ modkey, "Shift" }, "r",
+    awful.key({ modkey }, "r",
         function ()
             mypromptbox:run()
         end, {description = "Run prompt", group = "Awesome"}),
 
-    awful.key({"Control", "Mod1"}, "l",
+    awful.key({"Control", "Shift"}, "b",
         function()
             awful.spawn(settings.lock_command)
         end, {description = "Lock", group = "Awesome"}),
@@ -304,9 +333,9 @@ local globalkeys = gears.table.join(
 
     awful.key({ modkey, "Shift"   }, "q", awesome.quit, {description = "Quit awesome", group = "Awesome"}),
 
-    awful.key({ modkey,           }, "space",
-        mykeyboardlayout.next_layout,
-        {description="Change language", group="Awesome"}),
+    -- awful.key({ modkey,  "Shift"   }, "c",
+    --     mykeyboardlayout.next_layout,
+    --     {description="Change language", group="Awesome"}),
 
     awful.key({ modkey, "Shift"   }, "a", hotkeys_popup.show_help, {description="Show help", group="Awesome"}),
 
@@ -423,9 +452,9 @@ local globalkeys = gears.table.join(
         end, {description="Next track", group="Music player control"}),
 
     ----------------------{ TAGS }--------------------------------------------
-    awful.key({ modkey,}, "p", function() awful.tag.togglemfpol(t) end, {description = "Toggle master fill police", group = "Tag management"}),
+    awful.key({ modkey,}, ".", function() awful.tag.togglemfpol(t) end, {description = "Toggle master fill police", group = "Tag management"}),
 
-    awful.key({ modkey,}, "`",     awful.tag.history.restore, {description = "Go to previous tag", group = "Tag management"}),
+    awful.key({ modkey,}, ";",     awful.tag.history.restore, {description = "Go to previous tag", group = "Tag management"}),
 
     awful.key({ modkey,}, "-", function() awful.tag.setgap(awful.tag.getgap(t) - 5) end, {description = "Decrease gaps", group = "Tag management"}),
 
@@ -483,12 +512,12 @@ local globalkeys = gears.table.join(
             awful.tag.incncol(-1, nil, true)
         end, {description = "Decrease the number of columns", group = "Tag management"}),
 
-    awful.key({ "Mod1",           }, "space",
+    awful.key({ modkey,           }, "space",
         function ()
             awful.layout.inc( 1)
         end, {description = "Select next tag layout", group = "Tag management"}),
 
-    awful.key({ "Mod1",           }, "j",
+    awful.key({ modkey, "Shift", "Control" }, "j",
         function ()
             local scr = awful.screen.focused()
             for i = 1, #scr.tags do
@@ -499,7 +528,7 @@ local globalkeys = gears.table.join(
             end
         end, {description = "View next not-empty tag", group = "Tag management"}),
 
-    awful.key({ "Mod1",           }, "k",
+    awful.key({ modkey, "Shift", "Control" }, "k",
         function ()
             local scr = awful.screen.focused()
             for i = 1, #scr.tags do
@@ -510,7 +539,7 @@ local globalkeys = gears.table.join(
             end
         end, {description = "View prev not-empty tag", group = "Tag management"}),
 
-    awful.key({ "Mod1", "Shift"   }, "space",
+    awful.key({ modkey, "Shift"   }, "space",
         function ()
             awful.layout.inc(-1)
         end, {description = "Select previous tag layout", group = "Tag management"}),
@@ -662,7 +691,7 @@ local clientkeys = gears.table.join(
             c:raise()
         end, {description = "Toggle fullscreen", group = "Clients management"}),
 
-    awful.key({ "Mod1"}, "F4",
+    awful.key({ modkey, "Shift"}, "x",
         function (c)
             c:kill()
         end, {description = "Close", group = "Clients management"}),
@@ -780,7 +809,11 @@ awful.rules.rules = {
         properties = { floating = true }
     },
     {
-        rule_any = {type = { "normal", "dialog" }},
+        rule_any = {type = { "normal" }},
+        properties = { titlebars_enabled = false }
+    },
+    {
+        rule_any = {type = { "dialog" }},
         properties = { titlebars_enabled = true }
     },
     {

@@ -13,7 +13,7 @@ local apps = settings.default_apps
 beautiful.init(gears.filesystem.get_configuration_dir() .. "gruvbox-theme/theme.lua")
 
 local menu = {
-    { "Hotkeys", function() return false, hotkeys_popup.widget.show_help end, beautiful.hotkeys_icon},
+    { "Hotkeys", function() return false, my_hotkeys_popup.widget.show_help end, beautiful.hotkeys_icon},
     { "Restart", awesome.restart, beautiful.reboot_icon},
     { "Quit", function() awesome.quit() end, beautiful.logout_icon}
 }
