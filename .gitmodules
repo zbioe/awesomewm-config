@@ -1,0 +1,3 @@
+[submodule "pomodoro"]
+	path = pomodoro
+	url = git@github.com:zbioe/pomodoro-awesome.git

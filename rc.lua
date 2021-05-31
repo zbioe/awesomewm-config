@@ -56,6 +56,9 @@ naughty.config.defaults.timeout = 5
 -- Theme init
 beautiful.init(gears.filesystem.get_configuration_dir() .. "gruvbox-theme/theme.lua")
 
+-- Pomodoro
+local pomodoro = require("pomodoro")
+
 -- Default modkey.
 local modkey = "Mod4"
 
@@ -112,7 +115,6 @@ nextEmptyTag:buttons(gears.table.join(awful.button({},1, function()
         end
     end
 end)))
-
 awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
@@ -232,6 +234,8 @@ awful.screen.connect_for_each_screen(function(s)
             mykeyboardlayout,
             mytextclock,
             myseparator,
+            pomodoro,
+            myseparator,
             s.mylayoutbox,
             modules.widgets.tray.widget,
             layout = wibox.layout.fixed.horizontal,
@@ -313,7 +317,17 @@ local globalkeys = gears.table.join(
                 })
         end, {description = "Python", group = "Applications"}),
 
+    awful.key({modkey, "Shift"}, "s",
+        function()
+            pomodoro:status()
+        end, {description = "Status Pomodoro", group = "Applications"}),
+
+    awful.key({modkey, "Shift"}, "p",
+        function()
+            pomodoro:toggle()
+        end, {description = "Toggle Pomodoro", group = "Applications"}),
     ----------------------{ AWESOME }--------------------------------------------
+
     awful.key({ modkey }, "p",
         function ()
             awful.spawn([[rofi -show drun -modi drun -show-icons -width 30 -lines 8 -kb-row-tab "Tab"]])
@@ -324,9 +338,9 @@ local globalkeys = gears.table.join(
             mypromptbox:run()
         end, {description = "Run prompt", group = "Awesome"}),
 
-    awful.key({"Control", "Shift"}, "b",
+    awful.key({modkey, "Control"}, "b",
         function()
-            awful.spawn(settings.lock_command)
+            awful.spawn("slock")
         end, {description = "Lock", group = "Awesome"}),
 
     awful.key({ modkey, "Control" }, "r", awesome.restart, {description = "Reload awesome", group = "Awesome"}),
