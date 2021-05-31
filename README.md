@@ -1,14 +1,6 @@
 # awesomewm-config
 My configuration for git version of awesome WM
 
-
-# Screenshots
-![alt text](images/screenshot1.png?raw=true)
-With sidebar:
-![alt text](images/screenshot2.png?raw=true)
-Wallpaper can be found in `images/` folder.
-
-
 # Features
 * Sidebar
     * Toggle with "Super + c" or clicking on clock on the top bar
